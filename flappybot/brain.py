@@ -153,7 +153,7 @@ class Planner:
     simulates each with the learned physics and picks the cheapest.
     """
 
-    def __init__(self, horizon: float = 1.7, dt: float = 1 / 60, min_gap: float = 0.1,
+    def __init__(self, horizon: float = 1.7, dt: float = 1 / 30, min_gap: float = 0.1,
                  n_random: int = 1500, seed: int = 0):
         self.dt = dt
         self.T = T = int(horizon / dt)
@@ -162,7 +162,9 @@ class Planner:
         self.terminal_w = 0.0  # tested 5.0: no improvement (flags 14 vs 10 / 12 min)
         self.rng = np.random.default_rng(seed)
         hs = np.linspace(0.06, 0.94, 23)
-        ts = np.array([0, 6, 12, 18, 24, 32, 40, 50, 62, 76, T])
+        # switch times (seconds) -> steps
+        ts = np.unique(np.round(np.array([0, .1, .2, .3, .4, .53, .67, .83, 1.03, 1.27]) / dt).astype(int))
+        ts = np.append(ts[ts < T], T)
         H1, H2, TS = np.meshgrid(hs, hs, ts, indexing="ij")
         keep = ~((TS == T) & (H2 != H1))  # ts == T makes h2 irrelevant
         keep &= ~((TS == 0) & (H1 != H2))
@@ -184,7 +186,7 @@ class Planner:
         n = self.n_random
         r = self.rng
         ts1 = r.integers(0, T // 2, n)
-        ts2 = ts1 + r.integers(6, T, n)
+        ts2 = ts1 + r.integers(max(1, int(0.1 / self.dt)), T, n)
         rnd = np.stack([r.uniform(0.05, 0.95, n), ts1, r.uniform(0.05, 0.95, n),
                         np.minimum(ts2, T), r.uniform(0.05, 0.95, n)], axis=1)
         out = [rnd]
@@ -197,7 +199,7 @@ class Planner:
             m = 200
             var = np.tile(w, (m, 1))
             var[1:, [0, 2, 4]] += r.normal(0, 0.03, (m - 1, 3))
-            var[1:, [1, 3]] += np.round(r.normal(0, 2.5, (m - 1, 2)))
+            var[1:, [1, 3]] += np.round(r.normal(0, 0.04 / self.dt, (m - 1, 2)))
             var[:, [1, 3]] = np.clip(var[:, [1, 3]], 0, T)
             var[:, 3] = np.maximum(var[:, 3], var[:, 1])
             out.append(var)
@@ -222,9 +224,9 @@ class Planner:
             k = int(round(pt / dt))
             if 0 <= k < T:
                 forced[k] = True
-        Y = np.empty((P, T))
-        yy = np.full(P, float(y))
-        vv = np.full(P, float(vy))
+        Y = np.empty((P, T), np.float32)
+        yy = np.full(P, float(y), np.float32)
+        vv = np.full(P, float(vy), np.float32)
         since = np.full(P, 10**6 if not pending else 0)
         tap_at_shift = np.zeros(P, bool)
         g, vj = phys.g, phys.vj

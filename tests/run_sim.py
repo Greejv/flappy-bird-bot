@@ -16,6 +16,7 @@ from tests.simulator import Sim  # noqa: E402
 
 def run(seconds=60.0, seed=0, fps=30, proc=0.015, verbose=False, save=None, **simkw):
     simkw.setdefault('cube_rate', float(os.environ.get('CUBE_RATE', 0.15)))
+    fps = int(os.environ.get('FPS', fps))
     sim = Sim(seed=seed, **simkw)
     bot = Bot()
     dt = 1 / 120
