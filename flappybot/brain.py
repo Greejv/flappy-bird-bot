@@ -218,18 +218,33 @@ class Planner:
         plans = np.vstack([self.base, extra])
         hold = np.vstack([self.base_hold, self._hold(extra)])
         P = len(plans)
-        shift = max(0, int(round((offset + phys.lag) / dt)))
+        g, vj = phys.g, phys.vj
+        # A tap sent now takes effect at tau. Run the simulation on a grid
+        # t0 + k*dt that hits tau exactly (rounding tau to the grid put the
+        # flap up to dt/2 off, ~0.015 of screen height when falling fast).
+        tau = max(0.0, offset + phys.lag)
+        shift = int(tau // dt)
+        t0 = tau - shift * dt
+        y0, v0, tt = float(y), float(vy), 0.0
         forced = np.zeros(T, bool)
-        for pt in pending:
-            k = int(round(pt / dt))
+        for pt in sorted(pending):
+            if pt < t0:  # an already-sent tap lands before the grid starts
+                if pt > tt:
+                    y0 += v0 * (pt - tt) + 0.5 * g * (pt - tt) ** 2
+                    v0 += g * (pt - tt)
+                    tt = pt
+                v0 = vj
+                continue
+            k = int(round((pt - t0) / dt))
             if 0 <= k < T:
                 forced[k] = True
+        y0 += v0 * (t0 - tt) + 0.5 * g * (t0 - tt) ** 2
+        v0 += g * (t0 - tt)
         Y = np.empty((P, T), np.float32)
-        yy = np.full(P, float(y), np.float32)
-        vv = np.full(P, float(vy), np.float32)
+        yy = np.full(P, y0, np.float32)
+        vv = np.full(P, v0, np.float32)
         since = np.full(P, 10**6 if not pending else 0)
         tap_at_shift = np.zeros(P, bool)
-        g, vj = phys.g, phys.vj
         # the bot can only click when a new frame arrives -> flaps are only
         # possible every `every` steps (aligned with the next click at `shift`)
         every = max(1, int(round(frame_dt / dt)))
@@ -248,7 +263,7 @@ class Planner:
             yy = yy + vv * dt + 0.5 * g * dt * dt
             vv = vv + g * dt
             Y[:, k] = yy
-        t = (np.arange(T) + 1) * dt
+        t = t0 + (np.arange(T) + 1) * dt
         hh = bird_h / 2
         bx0, bx1 = bird_x
         cost = np.zeros(P)
