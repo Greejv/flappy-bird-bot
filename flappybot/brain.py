@@ -257,6 +257,7 @@ class Planner:
         dead_at = np.minimum(dead_at, np.where(out.any(1), out.argmax(1), T))
         target = np.full(T, 0.5)
         margin = 0.022
+        viol = np.zeros(P, np.float32)
         for pl in sorted(scene.pillars, key=lambda p: -p.x0):
             x0 = pl.x0 - phys.speed * t
             x1 = pl.x1 - phys.speed * t
@@ -265,9 +266,13 @@ class Planner:
             target = np.where(near, (pl.gap_top + pl.gap_bot) / 2, target)
             if not over.any():
                 continue
-            hit = over & ((Y - hh < pl.gap_top + margin) | (Y + hh > pl.gap_bot - margin))
-            dead_at = np.minimum(dead_at, np.where(hit.any(1), hit.argmax(1), T))
             d = np.minimum(Y - hh - pl.gap_top, pl.gap_bot - Y - hh)
+            # real collision (tiny tolerance) = death; closer than `margin`
+            # = risky. Kept apart so that when every plan is risky the bot
+            # still picks the least risky one instead of the "latest death".
+            hit = over & (d < 0.004)
+            dead_at = np.minimum(dead_at, np.where(hit.any(1), hit.argmax(1), T))
+            viol = np.maximum(viol, (np.clip(margin - d, 0, None) * over).max(1))
             cost += 150.0 * (np.clip(0.06 - d, 0, None) ** 2 * over).sum(1) * dt
         for items, w in ((scene.money, -money_w), (scene.cubes, -cube_w)):
             for bx in items:
@@ -305,6 +310,7 @@ class Planner:
         cost += self.terminal_w * (Y[:, -1] - target[-1]) ** 2
         dead = dead_at < T
         cost += dead * (100.0 + 100.0 * (T - dead_at) / T)
+        cost += (viol > 0) * (40.0 + 1000.0 * viol)
         best = int(np.argmin(cost))
         self._last = (Y, dead_at, cost)
         if t_frame is not None:
