@@ -39,6 +39,25 @@ jobs:
         run: venv/bin/python -m pytest -q tests -k "vision or flag"
       - name: Launcher syntax
         run: bash -n "Start Bot.command"
+      - name: Real screen capture + speed on macOS
+        continue-on-error: true
+        run: |
+          sw_vers
+          venv/bin/python - <<'PY'
+          import time
+          from flappybot.macos import Screen, mouse_pos, has_screen_recording
+          from flappybot.brain import Bot
+          print("screen recording permission:", has_screen_recording(), "mouse:", mouse_pos())
+          s = Screen(); bot = Bot()
+          region = {"left": 0, "top": 0, "width": 1000, "height": 750}
+          img = s.grab(region); print("frame", img.shape, "std", float(img.std()))
+          t = time.perf_counter(); n = 40
+          for _ in range(n):
+              img = s.grab(region)
+              bot.step(img, time.perf_counter(), time.perf_counter())
+          dt = (time.perf_counter() - t) / n
+          print(f"capture+think: {dt*1000:.1f} ms/frame = {1/dt:.0f} fps")
+          PY
 
   package:
     name: Package zip
