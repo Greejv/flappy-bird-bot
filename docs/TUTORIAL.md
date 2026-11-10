@@ -116,6 +116,7 @@ area?"*. If you moved or resized the browser, type **n** and select again.
 |---|---|
 | Move the mouse **into** the game | plays |
 | Move the mouse **out of** the game | pauses |
+| Press **Esc** (anywhere, even in the game) | **kills the bot instantly** |
 | Press **Ctrl + C** in Terminal | quits |
 
 ![Terminal while the bot plays](images/step7.png)

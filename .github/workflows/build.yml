@@ -39,6 +39,9 @@ jobs:
         run: venv/bin/python -m pytest -q tests -k "vision or flag"
       - name: Launcher syntax
         run: bash -n "Start Bot.command"
+      - name: Kill shortcut stops the bot (simulated key press)
+        continue-on-error: true
+        run: venv/bin/python scripts/ci_mac_killswitch.py
       - name: Real screen capture + speed on macOS
         continue-on-error: true
         run: |

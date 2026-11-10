@@ -25,7 +25,9 @@ FLAPPY MONEY BOT - QUICK START (macOS)
 
 5. Move the mouse INTO the game -> the bot plays.
    Move the mouse OUT of the game -> pause.
+   Esc (anywhere, even with the game in front) -> kill the bot instantly.
    Ctrl+C in the Terminal window -> quit.
+   (Other kill key: ./"Start Bot.command" --kill-key ctrl+alt+k)
 
 The bot learns the game's gravity, jump, speed and lag during the first few
 seconds - the status line shows "(learning)" until then.

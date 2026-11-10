@@ -40,6 +40,7 @@ extension: it plays like a (very fast) human.
 |---|---|
 | Mouse **inside** the game | plays |
 | Mouse **outside** the game | pauses |
+| **`Esc`** (anywhere, even with the game in front) | **kills the bot instantly** |
 | `Ctrl + C` in the Terminal window | quits |
 
 > Don't move or resize the browser window while the bot runs. If you did,
@@ -63,6 +64,7 @@ Options (append to the command above):
 | `--flag-weight 20` | avoid flags even harder (default 10) |
 | `--money-weight 2` | chase money harder (default 1) |
 | `--shield-weight 3` | chase the blue YOLO shield harder (default 2) |
+| `--kill-key ctrl+alt+k` | change the kill shortcut (default `esc`; e.g. `f12`, `cmd+shift+x`) |
 
 ---
 

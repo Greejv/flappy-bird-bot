@@ -12,7 +12,7 @@ from dataclasses import dataclass
 
 import numpy as np
 
-from .vision import Box, Pillar, Scene, Vision
+from .vision import Pillar, Scene, Vision
 
 
 @dataclass

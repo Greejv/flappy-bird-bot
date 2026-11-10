@@ -127,6 +127,8 @@ def main(argv=None):
     ap.add_argument("--flag-weight", type=float, default=10.0, help="how hard to avoid flags")
     ap.add_argument("--money-weight", type=float, default=1.0, help="how hard to chase money")
     ap.add_argument("--shield-weight", type=float, default=2.0, help="how hard to chase the blue YOLO shield")
+    ap.add_argument("--kill-key", default="esc",
+                    help="global shortcut that instantly quits the bot, e.g. esc, f12, ctrl+alt+k (default: esc)")
     a = ap.parse_args(argv)
 
     say(BANNER)
@@ -134,7 +136,18 @@ def main(argv=None):
         say("This bot drives a Mac (screen capture + clicks). Run it on macOS.")
         return 1
     check_permissions()
-    from .macos import Screen, click, mouse_pos
+    from .macos import Screen, click, mouse_pos, start_kill_switch
+
+    def kill():
+        print(f"\n\n[{a.kill_key.upper()} pressed] Bot killed.", flush=True)
+        os._exit(0)
+
+    try:
+        start_kill_switch(a.kill_key, kill)
+    except ValueError as e:
+        say(f"Bad --kill-key: {e}")
+        return 2
+    say(f"Kill switch: press {a.kill_key.upper()} anytime (works even when the game is in front).")
 
     cfg = load_cfg()
     region = cfg.get("region")
@@ -171,7 +184,7 @@ def main(argv=None):
     say("\n=== Running ===")
     say(" * Move the mouse INTO the game to start / resume.")
     say(" * Move the mouse OUT of the game to pause.")
-    say(" * Press Ctrl+C in this window to quit.\n")
+    say(f" * Press {a.kill_key.upper()} (anywhere) or Ctrl+C in this window to quit.\n")
 
     taps = 0
     frames = 0
