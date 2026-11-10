@@ -159,6 +159,8 @@ class Sim:
         hb = 0.019
         bx0, bx1 = self.bird_x - hb, self.bird_x + hb
         dead = self.y - hb < 0 or self.y + hb > 1
+        if dead:
+            self.log.append(("edge", round(self.t, 2), round(self.y, 3)))
         self.invuln = max(0.0, self.invuln - dt)
         pw = 0.078
         size = {"flag": (0.045, 0.025), "money": (0.06, 0.02), "cube": (0.05, 0.025)}
