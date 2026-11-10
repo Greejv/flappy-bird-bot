@@ -1,0 +1,285 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+  :root { --blue:#0a84ff; --text:#1d1d1f; --muted:#6e6e73; --line:#d2d2d7; --bg:#f5f5f7; }
+  * { box-sizing: border-box; }
+  body { margin:0; padding:24px; background:#e8e8ed; font-family: -apple-system, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif; color:var(--text); }
+  .fig { width: 760px; padding: 28px; margin-bottom: 40px; background: linear-gradient(135deg,#7f9cf5 0%,#b794f4 50%,#f6ad55 100%); border-radius: 14px; position: relative; }
+  .win { background:#fff; border-radius:12px; box-shadow:0 18px 50px rgba(0,0,0,.35); overflow:hidden; }
+  .bar { height:38px; background:#ececec; border-bottom:1px solid #d6d6d6; display:flex; align-items:center; padding:0 12px; gap:8px; font-size:13px; color:#555; }
+  .dot { width:12px; height:12px; border-radius:50%; display:inline-block; }
+  .r{background:#ff5f57}.y{background:#febc2e}.g{background:#28c840}
+  .bar .title { flex:1; text-align:center; margin-right:56px; font-weight:600; color:#333; }
+  .tag { position:absolute; top:10px; right:14px; font-size:11px; font-weight:700; letter-spacing:.06em; color:#fff; background:rgba(0,0,0,.35); padding:3px 8px; border-radius:20px; }
+  .callout { position:absolute; background:#ff3b30; color:#fff; font-weight:700; font-size:15px; padding:8px 12px; border-radius:10px; box-shadow:0 6px 18px rgba(0,0,0,.3); }
+  .ring { position:absolute; border:4px solid #ff3b30; border-radius:12px; box-shadow:0 0 0 4px rgba(255,59,48,.25); }
+  .hlt { outline:4px solid #ff3b30; outline-offset:4px; border-radius:8px; box-shadow:0 0 0 10px rgba(255,59,48,.18); }
+  .num { display:inline-flex; width:24px; height:24px; border-radius:50%; background:#fff; color:#ff3b30; align-items:center; justify-content:center; margin-right:6px; font-size:13px; }
+  /* finder */
+  .finder { display:flex; height:300px; }
+  .side { width:170px; background:#f0f0f2; border-right:1px solid #ddd; padding:12px; font-size:13px; color:#555; }
+  .side div { padding:5px 8px; border-radius:6px; }
+  .side .sel { background:#dcdce1; color:#111; }
+  .files { flex:1; padding:22px; display:flex; gap:34px; align-items:flex-start; flex-wrap:wrap; }
+  .file { width:110px; text-align:center; font-size:12px; }
+  .icon { width:72px; height:72px; margin:0 auto 8px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:34px; }
+  .folder { background:linear-gradient(#7cc4ff,#3d9df6); }
+  .zip { background:linear-gradient(#f2f2f2,#d9d9d9); border:1px solid #c8c8c8; font-size:14px; font-weight:700; color:#666; }
+  .cmd { background:#1e1e1e; color:#3ef06a; font-family: Menlo, monospace; font-size:16px; border:1px solid #444; }
+  .txt { background:#fff; border:1px solid #ccc; color:#999; font-size:24px; }
+  .py { background:linear-gradient(#ffe873,#4b8bbe); }
+  .menu { position:absolute; background:rgba(246,246,246,.98); border:1px solid #c9c9c9; border-radius:8px; box-shadow:0 10px 30px rgba(0,0,0,.25); padding:5px; width:220px; font-size:13px; }
+  .menu div { padding:4px 10px; border-radius:5px; }
+  .menu .hl { background:var(--blue); color:#fff; }
+  .menu hr { border:0; border-top:1px solid #ddd; margin:4px 0; }
+  /* alert */
+  .alert { width:300px; margin:0 auto; background:#f2f2f2; border-radius:14px; box-shadow:0 18px 50px rgba(0,0,0,.4); padding:22px 20px 16px; text-align:center; font-size:13px; }
+  .alert .ico { font-size:44px; }
+  .alert h3 { font-size:14px; margin:10px 0 8px; }
+  .alert p { color:#444; margin:0 0 14px; line-height:1.35; }
+  .btn { display:block; width:100%; padding:7px; border-radius:7px; background:#e0e0e0; margin-top:7px; font-size:13px; text-align:center; }
+  .btn.pri { background:var(--blue); color:#fff; font-weight:600; }
+  /* settings */
+  .settings { display:flex; height:420px; font-size:13px; }
+  .snav { width:200px; background:#f2f2f4; border-right:1px solid #ddd; padding:12px 8px; }
+  .snav .search { background:#e3e3e8; border-radius:7px; padding:5px 8px; color:#888; margin-bottom:10px; }
+  .snav div.item { padding:5px 8px; border-radius:6px; display:flex; gap:8px; align-items:center; color:#333; }
+  .snav .item.sel { background:var(--blue); color:#fff; }
+  .si { width:18px; height:18px; border-radius:5px; display:inline-block; }
+  .smain { flex:1; padding:18px 22px; background:#fff; overflow:hidden; }
+  .smain h2 { font-size:17px; margin:0 0 14px; display:flex; align-items:center; gap:10px; }
+  .back { color:#999; font-weight:400; }
+  .group { border:1px solid #e3e3e8; border-radius:10px; overflow:hidden; margin-bottom:14px; }
+  .row { display:flex; align-items:center; justify-content:space-between; padding:10px 14px; border-bottom:1px solid #eee; }
+  .row:last-child { border-bottom:0; }
+  .row .l { display:flex; gap:10px; align-items:center; }
+  .app { width:26px; height:26px; border-radius:6px; display:inline-flex; align-items:center; justify-content:center; font-size:13px; }
+  .term { background:#1e1e1e; color:#ddd; font-family:Menlo,monospace; font-size:11px; }
+  .sw { width:38px; height:22px; border-radius:11px; background:#d8d8dc; position:relative; }
+  .sw::after { content:""; position:absolute; top:2px; left:2px; width:18px; height:18px; border-radius:50%; background:#fff; box-shadow:0 1px 2px rgba(0,0,0,.3); }
+  .sw.on { background:#34c759; } .sw.on::after { left:18px; }
+  .desc { color:var(--muted); font-size:12px; margin-bottom:12px; line-height:1.4; }
+  .plusminus { padding:6px 12px; color:#555; background:#fafafa; font-size:15px; }
+  .obtn { border:1px solid #c7c7cc; border-radius:6px; padding:3px 10px; background:#fff; white-space:nowrap; margin-left:12px; }
+  /* terminal */
+  .tbody { background:#1e1e1e; color:#e5e5e5; font-family: Menlo, "DejaVu Sans Mono", monospace; font-size:12.5px; padding:14px 16px; height:330px; white-space:pre; line-height:1.45; overflow:hidden; }
+  .tbody .gr { color:#3ef06a; } .tbody .ye { color:#ffd166; } .tbody .cy { color:#6cd4ff; } .tbody .dim { color:#888; }
+  /* game */
+  .game { position:relative; width:700px; height:525px; margin:0 auto; border-radius:6px; overflow:hidden; box-shadow:0 18px 50px rgba(0,0,0,.35); }
+  .game img { width:100%; height:100%; display:block; }
+  .cursor { position:absolute; width:26px; height:26px; }
+  .sel-rect { position:absolute; border:3px dashed #ffeb3b; }
+  .legend { display:flex; gap:16px; justify-content:center; margin-top:14px; font-size:13px; color:#fff; font-weight:600; flex-wrap:wrap; }
+  .legend span::before { content:""; display:inline-block; width:14px; height:14px; border:3px solid currentColor; margin-right:6px; vertical-align:-3px; border-radius:2px; }
+</style></head>
+<body>
+
+<!-- 1: Finder after unzipping -->
+<div class="fig" id="step1">
+  <div class="tag">ILLUSTRATION</div>
+  <div class="win">
+    <div class="bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="title">Downloads › FlappyBot</span></div>
+    <div class="finder">
+      <div class="side"><div>Recents</div><div>Applications</div><div>Desktop</div><div class="sel">Downloads</div><div>Documents</div></div>
+      <div class="files">
+        <div class="file"><div class="icon cmd">&gt;_</div><b>Start Bot.command</b></div>
+        <div class="file"><div class="icon txt">≡</div>HOW TO START.txt</div>
+        <div class="file"><div class="icon folder">📁</div>flappybot</div>
+        <div class="file"><div class="icon txt">≡</div>requirements.txt</div>
+      </div>
+    </div>
+  </div>
+  <div class="ring" style="left:180px;top:96px;width:150px;height:130px"></div>
+  <div class="callout" style="left:330px;top:250px">Double-click “Start Bot.command”</div>
+</div>
+
+<!-- 2a: macOS 15+ warning -->
+<div class="fig" id="step2a">
+  <div class="tag">ILLUSTRATION · macOS 15 Sequoia and newer</div>
+  <div style="padding:30px 0">
+    <div class="alert">
+      <div class="ico">⚠️</div>
+      <h3>“Start Bot.command” Not Opened</h3>
+      <p>Apple could not verify “Start Bot.command” is free of malware that may harm your Mac or compromise your privacy.</p>
+      <div class="btn pri hlt">Done</div>
+      <div class="btn">Move to Trash</div>
+    </div>
+  </div>
+  <div class="callout" style="left:548px;top:236px">Click “Done”<br>(NOT Move to Trash)</div>
+</div>
+
+<!-- 2b: Privacy & Security -> Open Anyway -->
+<div class="fig" id="step2b">
+  <div class="tag">ILLUSTRATION · System Settings</div>
+  <div class="win">
+    <div class="bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="title">Privacy &amp; Security</span></div>
+    <div class="settings">
+      <div class="snav">
+        <div class="search">🔍 Search</div>
+        <div class="item"><span class="si" style="background:#8e8e93"></span>General</div>
+        <div class="item"><span class="si" style="background:#0a84ff"></span>Appearance</div>
+        <div class="item"><span class="si" style="background:#5856d6"></span>Displays</div>
+        <div class="item sel"><span class="si" style="background:#fff"></span>Privacy &amp; Security</div>
+        <div class="item"><span class="si" style="background:#ff9f0a"></span>Notifications</div>
+      </div>
+      <div class="smain">
+        <h2>Privacy &amp; Security</h2>
+        <div class="desc">… scroll all the way down to the <b>Security</b> section …</div>
+        <div class="group">
+          <div class="row"><span>Allow applications from</span><span style="color:#888">App Store &amp; Known Developers ⌄</span></div>
+          <div class="row"><span>“Start Bot.command” was blocked to protect your Mac.</span><span class="obtn hlt">Open Anyway</span></div>
+        </div>
+        <div class="desc">After clicking, confirm with <b>Open Anyway</b> again and enter your Mac password (or Touch ID).</div>
+      </div>
+    </div>
+  </div>
+  <div class="callout" style="left:470px;top:300px">Click “Open Anyway”</div>
+</div>
+
+<!-- 2c: older macOS: right click -> Open -->
+<div class="fig" id="step2c">
+  <div class="tag">ILLUSTRATION · macOS 14 and older</div>
+  <div class="win">
+    <div class="bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="title">Downloads › FlappyBot</span></div>
+    <div class="finder" style="height:270px">
+      <div class="side"><div>Recents</div><div>Applications</div><div class="sel">Downloads</div></div>
+      <div class="files"><div class="file"><div class="icon cmd">&gt;_</div><b>Start Bot.command</b></div></div>
+    </div>
+  </div>
+  <div class="menu" style="left:300px;top:100px">
+    <div class="hl">Open</div><div>Open With ›</div><hr><div>Move to Trash</div><hr><div>Get Info</div><div>Rename</div>
+  </div>
+  <div class="callout" style="left:540px;top:96px"><span class="num">1</span>Right-click (or Control-click)<br><span class="num">2</span>choose “Open”, then “Open” again</div>
+</div>
+
+<!-- 3: Terminal first run -->
+<div class="fig" id="step3">
+  <div class="tag">ILLUSTRATION · Terminal</div>
+  <div class="win">
+    <div class="bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="title">Terminal — Start Bot.command</span></div>
+    <div class="tbody"><span class="ye">First start: setting things up (about a minute, needs internet)...</span>
+<span class="dim">  installing numpy, scipy, mss, pyobjc ...</span>
+
+<span class="gr">  ___ _                        ___      _
+ | __| |__ _ _ __ _ __ _  _   | _ ) ___| |_
+ | _|| / _` | '_ \ '_ \ || |  | _ \/ _ \  _|
+ |_| |_\__,_| .__/ .__/\_, |  |___/\___/\__|
+            |_|  |_|   |__/</span>
+
+<span class="cy">=== macOS permissions needed (one time) ===</span>
+ * Screen Recording: lets the bot SEE the game.
+ * Accessibility: lets the bot CLICK.
+System Settings &gt; Privacy &amp; Security is opening. Turn ON 'Terminal' ...
+Press ENTER after enabling to re-check (Ctrl+C to quit)... <span style="background:#ddd">&nbsp;</span></div>
+  </div>
+  <div class="callout" style="left:440px;top:72px">Just wait — first start<br>installs everything (≈1 min)</div>
+</div>
+
+<!-- 4: Screen recording -->
+<div class="fig" id="step4">
+  <div class="tag">ILLUSTRATION · System Settings</div>
+  <div class="win">
+    <div class="bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="title">Screen &amp; System Audio Recording</span></div>
+    <div class="settings">
+      <div class="snav">
+        <div class="search">🔍 Search</div>
+        <div class="item"><span class="si" style="background:#8e8e93"></span>General</div>
+        <div class="item"><span class="si" style="background:#5856d6"></span>Displays</div>
+        <div class="item sel"><span class="si" style="background:#fff"></span>Privacy &amp; Security</div>
+      </div>
+      <div class="smain">
+        <h2><span class="back">‹</span> Screen &amp; System Audio Recording</h2>
+        <div class="desc">Allow the applications below to record the content of your screen and audio.<br>(on macOS 14 and older this page is called just <b>Screen Recording</b>)</div>
+        <div class="group">
+          <div class="row"><span class="l"><span class="app" style="background:#e5e5ea">💬</span>zoom.us</span><span class="sw"></span></div>
+          <div class="row"><span class="l"><span class="app term">&gt;_</span><b>Terminal</b></span><span class="sw on hlt"></span></div>
+          <div class="plusminus">＋ − </div>
+        </div>
+        <div class="desc">Terminal not in the list? Click <b>＋</b>, open <b>Applications › Utilities › Terminal</b>.</div>
+      </div>
+    </div>
+  </div>
+  <div class="callout" style="left:430px;top:400px">Switch <u>Terminal</u> ON</div>
+</div>
+
+<!-- 4b: quit & reopen -->
+<div class="fig" id="step4b">
+  <div class="tag">ILLUSTRATION</div>
+  <div style="padding:30px 0">
+    <div class="alert">
+      <div class="ico">⌨️</div>
+      <h3>“Terminal” may not be able to record the contents of your screen until it is quit.</h3>
+      <p>You can quit “Terminal” now, or do it later.</p>
+      <div class="btn pri hlt">Quit &amp; Reopen</div>
+      <div class="btn">Later</div>
+    </div>
+  </div>
+  <div class="callout" style="left:548px;top:224px">Click<br>“Quit &amp; Reopen”</div>
+</div>
+
+<!-- 5: Accessibility -->
+<div class="fig" id="step5">
+  <div class="tag">ILLUSTRATION · System Settings</div>
+  <div class="win">
+    <div class="bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="title">Accessibility</span></div>
+    <div class="settings">
+      <div class="snav">
+        <div class="search">🔍 Search</div>
+        <div class="item"><span class="si" style="background:#8e8e93"></span>General</div>
+        <div class="item"><span class="si" style="background:#5856d6"></span>Displays</div>
+        <div class="item sel"><span class="si" style="background:#fff"></span>Privacy &amp; Security</div>
+      </div>
+      <div class="smain">
+        <h2><span class="back">‹</span> Accessibility</h2>
+        <div class="desc">Allow the applications below to control your computer.</div>
+        <div class="group">
+          <div class="row"><span class="l"><span class="app term">&gt;_</span><b>Terminal</b></span><span class="sw on hlt"></span></div>
+          <div class="plusminus">＋ − </div>
+        </div>
+        <div class="desc">Terminal not in the list? Click <b>＋</b>, open <b>Applications › Utilities › Terminal</b>.<br>macOS asks for your password — that's normal.</div>
+      </div>
+    </div>
+  </div>
+  <div class="callout" style="left:430px;top:380px">Switch <u>Terminal</u> ON</div>
+</div>
+
+<!-- 6: select game area -->
+<div class="fig" id="step6">
+  <div class="tag">ILLUSTRATION</div>
+  <div class="game"><img src="game.png">
+    <div class="sel-rect" style="left:0;top:0;width:700px;height:525px"></div>
+    <svg class="cursor" style="left:4px;top:4px" viewBox="0 0 24 24"><path d="M2 2 L2 20 L7 15 L11 23 L14 22 L10 14 L17 14 Z" fill="#000" stroke="#fff" stroke-width="1.5"/></svg>
+    <svg class="cursor" style="left:668px;top:492px" viewBox="0 0 24 24"><path d="M2 2 L2 20 L7 15 L11 23 L14 22 L10 14 L17 14 Z" fill="#000" stroke="#fff" stroke-width="1.5"/></svg>
+  </div>
+  <div class="callout" style="left:62px;top:52px"><span class="num">1</span>Mouse on the TOP-LEFT corner → wait for countdown</div>
+  <div class="callout" style="left:300px;top:520px"><span class="num">2</span>then the BOTTOM-RIGHT corner → wait</div>
+</div>
+
+<!-- 7: running -->
+<div class="fig" id="step7">
+  <div class="tag">ILLUSTRATION · Terminal</div>
+  <div class="win">
+    <div class="bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="title">Terminal — Start Bot.command</span></div>
+    <div class="tbody" style="height:250px">Use saved game area 1280x958 at (0,87)? [Y/n] <span class="gr">⏎</span>
+
+First look at the game: bird=YES  pillars=4  money=1  flags=1  shield=0
+
+<span class="cy">=== Running ===</span>
+ * Move the mouse INTO the game to start / resume.
+ * Move the mouse OUT of the game to pause.
+ * Press Ctrl+C in this window to quit.
+
+<span class="gr">PLAYING</span>          fps=  52 taps=  418  bird=YES  pillars=3  money=1  flags=1  shield=0
+                 g=2.31 jump=-0.71 lag=44ms speed=0.42</div>
+  </div>
+  <div class="callout" style="left:380px;top:60px">Mouse INSIDE game = play<br>Mouse OUTSIDE = pause<br>Ctrl + C = quit</div>
+</div>
+
+<!-- 8: what the bot sees -->
+<div class="fig" id="step8">
+  <div class="tag">ILLUSTRATION · debug/check.png</div>
+  <div class="game"><img src="seen.png"></div>
+  <div class="legend"><span style="color:#2b8cff">spider (you)</span><span style="color:#ff4fff">pillars</span><span style="color:#2ee62e">money</span><span style="color:#ff3030">red flag</span><span style="color:#ffe14d">blue YOLO shield</span></div>
+</div>
+
+</body></html>

@@ -7,6 +7,7 @@ OUT=dist/FlappyBot
 rm -rf dist && mkdir -p "$OUT"
 cp -R flappybot requirements.txt "Start Bot.command" "$OUT/"
 cp docs/HOW-TO-START.txt "$OUT/HOW TO START.txt"
+python3 scripts/tutorial_html.py "$OUT/tutorial"   # illustrated guide (needs: pip install markdown)
 echo "$VERSION" > "$OUT/flappybot/VERSION"
 find "$OUT" -name '__pycache__' -prune -exec rm -rf {} +
 chmod +x "$OUT/Start Bot.command"

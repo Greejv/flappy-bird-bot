@@ -1,6 +1,8 @@
 FLAPPY MONEY BOT - QUICK START (macOS)
 ======================================
 
+>>> Illustrated step-by-step guide: open tutorial/TUTORIAL.html <<<
+
 1. Open the game in your browser so it is fully visible on screen.
 
 2. Double-click "Start Bot.command".
