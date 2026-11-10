@@ -143,7 +143,9 @@ The [Build & Release workflow](.github/workflows/build.yml) runs on every push:
    system Python, exactly like `Start Bot.command`,
 3. builds `FlappyBot-mac.zip` (uploaded as a workflow artifact).
 
-To publish a new download, push a version tag:
+To publish a new download, bump `VERSION` and either
+put `[release]` in the commit message, click **Actions → Build & Release →
+Run workflow**, or push a tag:
 
 ```bash
 git tag v1.0.1

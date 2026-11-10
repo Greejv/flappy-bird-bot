@@ -65,21 +65,31 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Version
+        id: v
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then echo "tag=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT";
+          else echo "tag=v$(cat VERSION | tr -d '[:space:]')" >> "$GITHUB_OUTPUT"; fi
       - name: Build zip
         run: |
           pip install markdown
-          ./scripts/build_zip.sh "${GITHUB_REF_NAME}"
+          ./scripts/build_zip.sh "${{ steps.v.outputs.tag }}"
       - uses: actions/upload-artifact@v4
         with:
           name: FlappyBot-mac
           path: dist/FlappyBot-mac.zip
       - name: Publish GitHub Release
-        if: startsWith(github.ref, 'refs/tags/v')
+        # release on: a v* tag, a manual "Run workflow", or a commit message containing [release]
+        if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[release]')
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ steps.v.outputs.tag }}
+          target_commitish: ${{ github.sha }}
+          name: Flappy Money Bot ${{ steps.v.outputs.tag }}
+          make_latest: true
           files: dist/FlappyBot-mac.zip
           generate_release_notes: true
           body: |
             ## Download
-            **[FlappyBot-mac.zip](https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/FlappyBot-mac.zip)**: unzip it and double-click `Start Bot.command`.
-            Full instructions: see the [README](https://github.com/${{ github.repository }}#readme).
+            **[FlappyBot-mac.zip](https://github.com/${{ github.repository }}/releases/download/${{ steps.v.outputs.tag }}/FlappyBot-mac.zip)**: unzip it and double-click `Start Bot.command`.
+            Step-by-step with pictures: [TUTORIAL](https://github.com/${{ github.repository }}/blob/${{ github.sha }}/docs/TUTORIAL.md) · [README](https://github.com/${{ github.repository }}#readme)
