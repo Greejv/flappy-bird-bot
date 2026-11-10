@@ -1,0 +1,64 @@
+name: Build & Release
+
+on:
+  push:
+    branches: ["**"]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    name: Simulator tests (Linux)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install numpy scipy pillow pytest
+      - run: pytest -q -s tests
+
+  mac:
+    name: Install & smoke test (macOS, Apple Silicon)
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install exactly like "Start Bot.command" does (system Python)
+        run: |
+          /usr/bin/python3 --version
+          /usr/bin/python3 -m venv venv
+          venv/bin/python -m pip install --quiet --upgrade pip
+          venv/bin/python -m pip install --quiet -r requirements.txt pytest
+      - name: Import macOS modules
+        run: venv/bin/python -c "import Quartz, mss; import flappybot.macos, flappybot.main; from flappybot.brain import Bot; Bot(); print('ok')"
+      - name: Vision tests on macOS
+        run: venv/bin/python -m pytest -q tests -k "vision or flag"
+      - name: Launcher syntax
+        run: bash -n "Start Bot.command"
+
+  package:
+    name: Package zip
+    needs: [test, mac]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build zip
+        run: ./scripts/build_zip.sh "${GITHUB_REF_NAME}"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: FlappyBot-mac
+          path: dist/FlappyBot-mac.zip
+      - name: Publish GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/FlappyBot-mac.zip
+          generate_release_notes: true
+          body: |
+            ## Download
+            **[FlappyBot-mac.zip](https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/FlappyBot-mac.zip)**: unzip it and double-click `Start Bot.command`.
+            Full instructions: see the [README](https://github.com/${{ github.repository }}#readme).

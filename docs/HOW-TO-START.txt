@@ -1,0 +1,34 @@
+FLAPPY MONEY BOT - QUICK START (macOS)
+======================================
+
+1. Open the game in your browser so it is fully visible on screen.
+
+2. Double-click "Start Bot.command".
+   - If macOS says it "cannot be opened" / "unidentified developer":
+     right-click (or Control-click) "Start Bot.command" -> Open -> Open.
+     On macOS 15+: System Settings -> Privacy & Security -> scroll down ->
+     "Open Anyway".
+   - First start installs what it needs (about a minute, needs internet).
+     If Python is missing, macOS offers to install the "Command Line
+     Developer Tools" - click Install, then double-click again.
+
+3. Allow permissions for "Terminal" when asked (one time):
+   - Screen Recording  (so the bot can SEE the game)
+   - Accessibility     (so the bot can CLICK)
+   Then quit Terminal and double-click "Start Bot.command" again.
+
+4. Show the bot where the game is: put the mouse on the TOP-LEFT corner of
+   the game, wait for the countdown, then the BOTTOM-RIGHT corner.
+   (It remembers this. Answer "n" next time if the window moved.)
+
+5. Move the mouse INTO the game -> the bot plays.
+   Move the mouse OUT of the game -> pause.
+   Ctrl+C in the Terminal window -> quit.
+
+The bot learns the game's gravity, jump, speed and lag during the first few
+seconds - the status line shows "(learning)" until then.
+
+Trouble? Run in Terminal from this folder:
+    ./"Start Bot.command" --test
+and look at debug/check.png: blue box = bird, magenta = pillars,
+green = money, red = flags.
