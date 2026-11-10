@@ -11,7 +11,7 @@ extension: it plays like a (very fast) human.
   <a href="https://github.com/Greejv/flappy-bird-bot/releases/latest/download/FlappyBot-mac.zip"><b>⬇️ Download FlappyBot-mac.zip (latest release)</b></a>
 </p>
 
-<p align="center"><b>📖 New here? Follow the <a href="docs/TUTORIAL.md">illustrated step-by-step tutorial</a></b> (download → permissions → play, with pictures).</p>
+<p align="center"><b>📖 New here? Follow the <a href="docs/TUTORIAL.md">illustrated step-by-step tutorial</a></b> (download → permissions → play, with pictures).<br>🇸🇰 <b><a href="docs/NAVOD.md">Podrobný návod po slovensky s ilustráciami</a></b></p>
 
 ---
 

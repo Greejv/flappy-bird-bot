@@ -8,6 +8,8 @@ About **5 minutes** the first time. After that it's just a double-click.
 **You need:** a Mac (Apple Silicon or Intel, macOS 12 or newer), an internet
 connection for the first start, and the game open in your browser.
 
+![Overview of the 5 steps](images/overview.png)
+
 ---
 
 ## Step 1: Download and unzip
@@ -120,6 +122,14 @@ area?"*. If you moved or resized the browser, type **n** and select again.
 | Press **Ctrl + C** in Terminal | quits |
 
 ![Terminal while the bot plays](images/step7.png)
+
+![Controls](images/controls.png)
+
+**When the game ends** the bot stops clicking and shows `waiting for bird`.
+Start a new round in the game yourself; the bot continues as soon as the
+spider appears.
+
+![Game over: you start a new round, the bot continues](images/gameover.png)
 
 The first few seconds the status line shows **(learning)**. The bot is
 measuring the game's gravity, jump and speed. After that it plays at full skill:

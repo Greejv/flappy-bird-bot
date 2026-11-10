@@ -71,12 +71,30 @@
   .sel-rect { position:absolute; border:3px dashed #ffeb3b; }
   .legend { background:rgba(0,0,0,.65); border-radius:10px; padding:8px 12px; display:flex; gap:16px; justify-content:center; margin-top:14px; font-size:13px; color:#fff; font-weight:600; flex-wrap:wrap; }
   .legend span::before { content:""; display:inline-block; width:14px; height:14px; border:3px solid currentColor; margin-right:6px; vertical-align:-3px; border-radius:2px; }
+
+  .flow { display:flex; gap:10px; align-items:stretch; }
+  .stepc { flex:1; background:#fff; border-radius:12px; padding:14px 10px; text-align:center; box-shadow:0 8px 24px rgba(0,0,0,.2); font-size:13px; }
+  .stepc .big { font-size:34px; margin-bottom:6px; }
+  .stepc b { display:block; font-size:14px; margin-bottom:4px; }
+  .stepc .t { color:#666; font-size:11.5px; }
+  .stepc .n { display:inline-flex; width:26px; height:26px; border-radius:50%; background:#ff3b30; color:#fff; font-weight:700; align-items:center; justify-content:center; margin-bottom:6px; }
+  .arrow { align-self:center; color:#fff; font-size:22px; font-weight:700; }
+  .once { margin-top:14px; color:#fff; font-weight:700; text-align:center; font-size:14px; }
+  .ctl { display:grid; grid-template-columns: 1fr 1fr; gap:16px; }
+  .card { background:#fff; border-radius:12px; padding:16px; box-shadow:0 8px 24px rgba(0,0,0,.2); font-size:14px; }
+  .card h4 { margin:0 0 10px; font-size:15px; }
+  .mini { position:relative; height:120px; border-radius:8px; background:linear-gradient(#2a3a8c,#c33 50%,#eee 50%); overflow:hidden; }
+  .mini .gm { position:absolute; left:20px; top:14px; width:150px; height:92px; border:3px solid #34c759; border-radius:6px; background:rgba(255,255,255,.18); }
+  .mini .gm.off { border-color:#ff9f0a; }
+  .key { display:inline-flex; min-width:54px; height:46px; padding:0 12px; border-radius:9px; background:linear-gradient(#fff,#e6e6ea); border:1px solid #bbb; box-shadow:0 3px 0 #aaa; align-items:center; justify-content:center; font-weight:700; font-size:15px; margin:4px; }
+  .key.hot { background:linear-gradient(#ff6b60,#ff3b30); color:#fff; border-color:#c4271d; box-shadow:0 3px 0 #a31d15, 0 0 0 6px rgba(255,59,48,.25); }
+  .small { color:#666; font-size:12.5px; margin-top:8px; line-height:1.4; }
 </style></head>
 <body>
 
 <!-- 1: Finder after unzipping -->
 <div class="fig" id="step1">
-  <div class="tag">ILLUSTRATION</div>
+  <div class="tag" data-sk="ILUSTRÁCIA">ILLUSTRATION</div>
   <div class="win">
     <div class="bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="title">Downloads › FlappyBot</span></div>
     <div class="finder">
@@ -90,12 +108,12 @@
     </div>
   </div>
   <div class="ring" style="left:180px;top:96px;width:150px;height:130px"></div>
-  <div class="callout" style="left:330px;top:250px">Double-click “Start Bot.command”</div>
+  <div class="callout" style="left:330px;top:250px" data-sk="Dvakrát klikni na „Start Bot.command“">Double-click “Start Bot.command”</div>
 </div>
 
 <!-- 2a: macOS 15+ warning -->
 <div class="fig" id="step2a">
-  <div class="tag">ILLUSTRATION · macOS 15 Sequoia and newer</div>
+  <div class="tag" data-sk="ILUSTRÁCIA · macOS 15 Sequoia a novší">ILLUSTRATION · macOS 15 Sequoia and newer</div>
   <div style="padding:30px 0">
     <div class="alert">
       <div class="ico">⚠️</div>
@@ -105,12 +123,12 @@
       <div class="btn">Move to Trash</div>
     </div>
   </div>
-  <div class="callout" style="left:548px;top:236px">Click “Done”<br>(NOT Move to Trash)</div>
+  <div class="callout" style="left:548px;top:236px" data-sk="Klikni „Done“ (Hotovo)<br>NIE „Move to Trash“">Click “Done”<br>(NOT Move to Trash)</div>
 </div>
 
 <!-- 2b: Privacy & Security -> Open Anyway -->
 <div class="fig" id="step2b">
-  <div class="tag">ILLUSTRATION · System Settings</div>
+  <div class="tag" data-sk="ILUSTRÁCIA · Systémové nastavenia">ILLUSTRATION · System Settings</div>
   <div class="win">
     <div class="bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="title">Privacy &amp; Security</span></div>
     <div class="settings">
@@ -124,21 +142,21 @@
       </div>
       <div class="smain">
         <h2>Privacy &amp; Security</h2>
-        <div class="desc">… scroll all the way down to the <b>Security</b> section …</div>
+        <div class="desc" data-sk="… zroluj úplne dole do sekcie <b>Security</b> (Zabezpečenie) …">… scroll all the way down to the <b>Security</b> section …</div>
         <div class="group">
           <div class="row"><span>Allow applications from</span><span style="color:#888">App Store &amp; Known Developers ⌄</span></div>
           <div class="row"><span>“Start Bot.command” was blocked to protect your Mac.</span><span class="obtn hlt">Open Anyway</span></div>
         </div>
-        <div class="desc">After clicking, confirm with <b>Open Anyway</b> again and enter your Mac password (or Touch ID).</div>
+        <div class="desc" data-sk="Potom ešte raz potvrď <b>Open Anyway</b> a zadaj heslo k Macu (alebo Touch ID).">After clicking, confirm with <b>Open Anyway</b> again and enter your Mac password (or Touch ID).</div>
       </div>
     </div>
   </div>
-  <div class="callout" style="left:470px;top:300px">Click “Open Anyway”</div>
+  <div class="callout" style="left:470px;top:300px" data-sk="Klikni „Open Anyway“<br>(Napriek tomu otvoriť)">Click “Open Anyway”</div>
 </div>
 
 <!-- 2c: older macOS: right click -> Open -->
 <div class="fig" id="step2c">
-  <div class="tag">ILLUSTRATION · macOS 14 and older</div>
+  <div class="tag" data-sk="ILUSTRÁCIA · macOS 14 a starší">ILLUSTRATION · macOS 14 and older</div>
   <div class="win">
     <div class="bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="title">Downloads › FlappyBot</span></div>
     <div class="finder" style="height:270px">
@@ -149,12 +167,12 @@
   <div class="menu" style="left:300px;top:100px">
     <div class="hl">Open</div><div>Open With ›</div><hr><div>Move to Trash</div><hr><div>Get Info</div><div>Rename</div>
   </div>
-  <div class="callout" style="left:540px;top:96px"><span class="num">1</span>Right-click (or Control-click)<br><span class="num">2</span>choose “Open”, then “Open” again</div>
+  <div class="callout" style="left:540px;top:96px" data-sk="<span class=&quot;num&quot;>1</span>Pravé tlačidlo myši (alebo Control + klik)<br><span class=&quot;num&quot;>2</span>vyber „Open“ (Otvoriť), potom znova „Open“"><span class="num">1</span>Right-click (or Control-click)<br><span class="num">2</span>choose “Open”, then “Open” again</div>
 </div>
 
 <!-- 3: Terminal first run -->
 <div class="fig" id="step3">
-  <div class="tag">ILLUSTRATION · Terminal</div>
+  <div class="tag" data-sk="ILUSTRÁCIA · Terminál">ILLUSTRATION · Terminal</div>
   <div class="win">
     <div class="bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="title">Terminal — Start Bot.command</span></div>
     <div class="tbody"><span class="ye">First start: setting things up (about a minute, needs internet)...</span>
@@ -172,12 +190,12 @@
 System Settings &gt; Privacy &amp; Security is opening. Turn ON 'Terminal' ...
 Press ENTER after enabling to re-check (Ctrl+C to quit)... <span style="background:#ddd">&nbsp;</span></div>
   </div>
-  <div class="callout" style="left:470px;top:330px">Just wait — first start<br>installs everything (≈1 min)</div>
+  <div class="callout" style="left:470px;top:330px" data-sk="Len počkaj — prvé spustenie<br>všetko nainštaluje (≈1 min)">Just wait — first start<br>installs everything (≈1 min)</div>
 </div>
 
 <!-- 4: Screen recording -->
 <div class="fig" id="step4">
-  <div class="tag">ILLUSTRATION · System Settings</div>
+  <div class="tag" data-sk="ILUSTRÁCIA · Systémové nastavenia">ILLUSTRATION · System Settings</div>
   <div class="win">
     <div class="bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="title">Screen &amp; System Audio Recording</span></div>
     <div class="settings">
@@ -189,22 +207,22 @@ Press ENTER after enabling to re-check (Ctrl+C to quit)... <span style="backgrou
       </div>
       <div class="smain">
         <h2><span class="back">‹</span> Screen &amp; System Audio Recording</h2>
-        <div class="desc">Allow the applications below to record the content of your screen and audio.<br>(on macOS 14 and older this page is called just <b>Screen Recording</b>)</div>
+        <div class="desc" data-sk="Tu povolíš aplikáciám nahrávať obrazovku.<br>(na macOS 14 a staršom sa stránka volá len <b>Screen Recording</b> / Nahrávanie obrazovky)">Allow the applications below to record the content of your screen and audio.<br>(on macOS 14 and older this page is called just <b>Screen Recording</b>)</div>
         <div class="group">
           <div class="row"><span class="l"><span class="app" style="background:#e5e5ea">💬</span>zoom.us</span><span class="sw"></span></div>
           <div class="row"><span class="l"><span class="app term">&gt;_</span><b>Terminal</b></span><span class="sw on hlt"></span></div>
           <div class="plusminus">＋ − </div>
         </div>
-        <div class="desc">Terminal not in the list? Click <b>＋</b>, open <b>Applications › Utilities › Terminal</b>.</div>
+        <div class="desc" data-sk="Terminál nie je v zozname? Klikni <b>＋</b> a vyber <b>Aplikácie › Utility › Terminál</b>.">Terminal not in the list? Click <b>＋</b>, open <b>Applications › Utilities › Terminal</b>.</div>
       </div>
     </div>
   </div>
-  <div class="callout" style="left:430px;top:400px">Switch <u>Terminal</u> ON</div>
+  <div class="callout" style="left:430px;top:400px" data-sk="Zapni prepínač pri <u>Terminal</u>">Switch <u>Terminal</u> ON</div>
 </div>
 
 <!-- 4b: quit & reopen -->
 <div class="fig" id="step4b">
-  <div class="tag">ILLUSTRATION</div>
+  <div class="tag" data-sk="ILUSTRÁCIA">ILLUSTRATION</div>
   <div style="padding:30px 0">
     <div class="alert">
       <div class="ico">⌨️</div>
@@ -214,12 +232,12 @@ Press ENTER after enabling to re-check (Ctrl+C to quit)... <span style="backgrou
       <div class="btn">Later</div>
     </div>
   </div>
-  <div class="callout" style="left:548px;top:224px">Click<br>“Quit &amp; Reopen”</div>
+  <div class="callout" style="left:548px;top:224px" data-sk="Klikni<br>„Quit &amp; Reopen“<br>(Ukončiť a<br>znova otvoriť)">Click<br>“Quit &amp; Reopen”</div>
 </div>
 
 <!-- 5: Accessibility -->
 <div class="fig" id="step5">
-  <div class="tag">ILLUSTRATION · System Settings</div>
+  <div class="tag" data-sk="ILUSTRÁCIA · Systémové nastavenia">ILLUSTRATION · System Settings</div>
   <div class="win">
     <div class="bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="title">Accessibility</span></div>
     <div class="settings">
@@ -231,33 +249,33 @@ Press ENTER after enabling to re-check (Ctrl+C to quit)... <span style="backgrou
       </div>
       <div class="smain">
         <h2><span class="back">‹</span> Accessibility</h2>
-        <div class="desc">Allow the applications below to control your computer.</div>
+        <div class="desc" data-sk="Tu povolíš aplikáciám ovládať počítač (klikať).">Allow the applications below to control your computer.</div>
         <div class="group">
           <div class="row"><span class="l"><span class="app term">&gt;_</span><b>Terminal</b></span><span class="sw on hlt"></span></div>
           <div class="plusminus">＋ − </div>
         </div>
-        <div class="desc">Terminal not in the list? Click <b>＋</b>, open <b>Applications › Utilities › Terminal</b>.<br>macOS asks for your password — that's normal.</div>
+        <div class="desc" data-sk="Terminál nie je v zozname? Klikni <b>＋</b> a vyber <b>Aplikácie › Utility › Terminál</b>.<br>macOS si vypýta heslo — to je normálne.">Terminal not in the list? Click <b>＋</b>, open <b>Applications › Utilities › Terminal</b>.<br>macOS asks for your password — that's normal.</div>
       </div>
     </div>
   </div>
-  <div class="callout" style="left:430px;top:380px">Switch <u>Terminal</u> ON</div>
+  <div class="callout" style="left:430px;top:380px" data-sk="Zapni prepínač pri <u>Terminal</u>">Switch <u>Terminal</u> ON</div>
 </div>
 
 <!-- 6: select game area -->
 <div class="fig" id="step6">
-  <div class="tag">ILLUSTRATION</div>
+  <div class="tag" data-sk="ILUSTRÁCIA">ILLUSTRATION</div>
   <div class="game"><img src="game.png">
     <div class="sel-rect" style="left:0;top:0;width:700px;height:525px"></div>
     <svg class="cursor" style="left:4px;top:4px" viewBox="0 0 24 24"><path d="M2 2 L2 20 L7 15 L11 23 L14 22 L10 14 L17 14 Z" fill="#000" stroke="#fff" stroke-width="1.5"/></svg>
     <svg class="cursor" style="left:668px;top:492px" viewBox="0 0 24 24"><path d="M2 2 L2 20 L7 15 L11 23 L14 22 L10 14 L17 14 Z" fill="#000" stroke="#fff" stroke-width="1.5"/></svg>
   </div>
-  <div class="callout" style="left:62px;top:52px"><span class="num">1</span>Mouse on the TOP-LEFT corner → wait for countdown</div>
-  <div class="callout" style="left:300px;top:520px"><span class="num">2</span>then the BOTTOM-RIGHT corner → wait</div>
+  <div class="callout" style="left:62px;top:52px" data-sk="<span class=&quot;num&quot;>1</span>Myš na ĽAVÝ HORNÝ roh hry → počkaj na odpočet"><span class="num">1</span>Mouse on the TOP-LEFT corner → wait for countdown</div>
+  <div class="callout" style="left:300px;top:520px" data-sk="<span class=&quot;num&quot;>2</span>potom na PRAVÝ DOLNÝ roh → počkaj"><span class="num">2</span>then the BOTTOM-RIGHT corner → wait</div>
 </div>
 
 <!-- 7: running -->
 <div class="fig" id="step7">
-  <div class="tag">ILLUSTRATION · Terminal</div>
+  <div class="tag" data-sk="ILUSTRÁCIA · Terminál">ILLUSTRATION · Terminal</div>
   <div class="win">
     <div class="bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="title">Terminal — Start Bot.command</span></div>
     <div class="tbody" style="height:330px">Use saved game area 1280x958 at (0,87)? [Y/n] <span class="gr">⏎</span>
@@ -273,14 +291,64 @@ First look at the game: bird=YES  pillars=4  money=1  flags=1  shield=0
 <span class="gr">PLAYING</span>          fps=  52 taps=  418  bird=YES  pillars=3  money=1  flags=1  shield=0
                  g=2.31 jump=-0.71 lag=44ms speed=0.42</div>
   </div>
-  <div class="callout" style="left:470px;top:310px">Mouse INSIDE game = play<br>Mouse OUTSIDE = pause<br>Esc = kill the bot</div>
+  <div class="callout" style="left:470px;top:310px" data-sk="Myš V HRE = bot hrá<br>Myš MIMO hry = pauza<br>Esc = okamžite vypnúť bota">Mouse INSIDE game = play<br>Mouse OUTSIDE = pause<br>Esc = kill the bot</div>
 </div>
 
 <!-- 8: what the bot sees -->
 <div class="fig" id="step8">
-  <div class="tag">ILLUSTRATION · debug/check.png</div>
+  <div class="tag" data-sk="ILUSTRÁCIA · debug/check.png">ILLUSTRATION · debug/check.png</div>
   <div class="game"><img src="seen.png"></div>
-  <div class="legend"><span style="color:#2b8cff">spider (you)</span><span style="color:#ff4fff">pillars</span><span style="color:#2ee62e">money</span><span style="color:#ff3030">red flag</span><span style="color:#ffe14d">blue YOLO shield</span></div>
+  <div class="legend"><span style="color:#2b8cff" data-sk="pavúk (ty)">spider (you)</span><span style="color:#ff4fff" data-sk="stĺpy">pillars</span><span style="color:#2ee62e" data-sk="peniaze">money</span><span style="color:#ff3030" data-sk="červená vlajka">red flag</span><span style="color:#ffe14d" data-sk="modrý štít YOLO">blue YOLO shield</span></div>
+</div>
+
+
+<!-- overview -->
+<div class="fig" id="overview">
+  <div class="tag" data-sk="ILUSTRÁCIA · prehľad">ILLUSTRATION · overview</div>
+  <div class="flow" style="margin-top:14px">
+    <div class="stepc"><div class="n">1</div><div class="big">📦</div><b data-sk="Stiahni a rozbaľ">Download &amp; unzip</b><div class="t" data-sk="FlappyBot-mac.zip">FlappyBot-mac.zip</div></div>
+    <div class="arrow">›</div>
+    <div class="stepc"><div class="n">2</div><div class="big">🛡️</div><b data-sk="Povoľ otvorenie">Allow opening</b><div class="t" data-sk="„Open Anyway“">“Open Anyway”</div></div>
+    <div class="arrow">›</div>
+    <div class="stepc"><div class="n">3</div><div class="big">🔐</div><b data-sk="2 povolenia">2 permissions</b><div class="t" data-sk="Nahrávanie obrazovky + Prístupnosť">Screen Recording + Accessibility</div></div>
+    <div class="arrow">›</div>
+    <div class="stepc"><div class="n">4</div><div class="big">🎯</div><b data-sk="Označ hru">Mark the game</b><div class="t" data-sk="2 rohy myšou">2 corners with the mouse</div></div>
+    <div class="arrow">›</div>
+    <div class="stepc"><div class="n">5</div><div class="big">🕷️</div><b data-sk="Hraj!">Play!</b><div class="t" data-sk="myš do hry">mouse into the game</div></div>
+  </div>
+  <div class="once" data-sk="Kroky 1–3 robíš len prvýkrát (≈5 minút). Potom stačí dvojklik a Enter.">Steps 1–3 only the first time (≈5 minutes). After that: double-click + Enter.</div>
+</div>
+
+<!-- controls -->
+<div class="fig" id="controls">
+  <div class="tag" data-sk="ILUSTRÁCIA · ovládanie">ILLUSTRATION · controls</div>
+  <div class="ctl" style="margin-top:14px">
+    <div class="card"><h4 data-sk="🟢 Myš V HRE → bot hrá">🟢 Mouse IN the game → bot plays</h4>
+      <div class="mini"><div class="gm"></div><svg style="position:absolute;width:24px;height:24px;left:110px;top:58px" viewBox="0 0 24 24"><path d="M2 2 L2 20 L7 15 L11 23 L14 22 L10 14 L17 14 Z" fill="#000" stroke="#fff" stroke-width="1.5"/></svg></div>
+      <div class="small" data-sk="Bot sám kliká (kurzor bude skákať do hry). Nehýb myšou, kým hrá.">The bot clicks by itself (the cursor jumps into the game). Don't move the mouse while it plays.</div></div>
+    <div class="card"><h4 data-sk="🟠 Myš MIMO hry → pauza">🟠 Mouse OUT of the game → pause</h4>
+      <div class="mini"><div class="gm off"></div><svg style="position:absolute;width:24px;height:24px;left:230px;top:58px" viewBox="0 0 24 24"><path d="M2 2 L2 20 L7 15 L11 23 L14 22 L10 14 L17 14 Z" fill="#000" stroke="#fff" stroke-width="1.5"/></svg></div>
+      <div class="small" data-sk="Vytiahni myš z hry a bot prestane klikať. Vráť ju do hry a pokračuje.">Move the mouse out and the bot stops clicking. Move it back in to continue.</div></div>
+    <div class="card"><h4 data-sk="🔴 Okamžite vypnúť">🔴 Kill instantly</h4>
+      <div><span class="key hot">esc</span></div>
+      <div class="small" data-sk="Funguje kdekoľvek — aj keď je v popredí prehliadač s hrou. Iná klávesa: --kill-key ctrl+alt+k">Works anywhere — even with the game's browser in front. Other key: --kill-key ctrl+alt+k</div></div>
+    <div class="card"><h4 data-sk="⌨️ Ukončiť v Termináli">⌨️ Quit in Terminal</h4>
+      <div><span class="key">control</span>+<span class="key">C</span></div>
+      <div class="small" data-sk="Klikni do okna Terminálu a stlač Control + C.">Click into the Terminal window and press Control + C.</div></div>
+  </div>
+</div>
+
+<!-- game over -->
+<div class="fig" id="gameover">
+  <div class="tag" data-sk="ILUSTRÁCIA · koniec hry">ILLUSTRATION · game over</div>
+  <div class="flow" style="margin-top:14px">
+    <div class="stepc"><div class="big">💥</div><b data-sk="Hra skončila">Game over</b><div class="t" data-sk="Bot to zistí sám (pavúk zmizne) a prestane klikať.">The bot notices (spider gone) and stops clicking.</div></div>
+    <div class="arrow">›</div>
+    <div class="stepc"><div class="big">🖱️</div><b data-sk="Spusti hru znova">Start a new round</b><div class="t" data-sk="Klikni v hre na tlačidlo pre novú hru — ty sám.">Click the game's replay/start button yourself.</div></div>
+    <div class="arrow">›</div>
+    <div class="stepc"><div class="big">🕷️</div><b data-sk="Bot pokračuje">Bot continues</b><div class="t" data-sk="Keď sa pavúk objaví, bot hrá ďalej. Nastavenia si pamätá.">As soon as the spider appears it plays again — it remembers everything it learned.</div></div>
+  </div>
+  <div class="once" data-sk="Stav „waiting for bird“ v Termináli = bot čaká, kým spustíš hru.">Status “waiting for bird” in Terminal = the bot is waiting for you to start the game.</div>
 </div>
 
 </body></html>
